@@ -1,5 +1,5 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import userDefaultPic from '../assets/assets/user.png'
 const Navbar = () => {
 
@@ -34,7 +34,7 @@ const Navbar = () => {
                     </div>
                 </label>
 
-     <button className="btn">Login</button>
+     <Link to='/auth/login' className="btn">Login</Link>
             </div>
         </div>
     );
