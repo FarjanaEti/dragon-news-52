@@ -1,11 +1,36 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
+import { AuthContext } from '../Provider/AuthProvider';
 
 const Register = () => {
+  const {createNewUser,setUser}=useContext(AuthContext)
+
+  const handleSubmit= (e)=>{
+    e.preventDefault();
+    //get form data
+    const form = new FormData(e.target);
+    const name = form.get("name");
+    const email = form.get("email");
+    const photo = form.get("photo");
+    const password = form.get("pass");
+
+    createNewUser(email, password)
+      .then((result) => {
+        const user = result.user;
+        setUser(user);
+        console.log(user)
+       })
+      .catch((err) => {
+        console.log(err);
+        // ..
+      });
+  };
+  
+
   return (
     <div className='flex items-center justify-center min-h-screen'>
      <div className="card items-center bg-base-100 w-full max-w-sm shrink-0 shadow-2xl">
-      <form className="card-body">
+      <form onSubmit={handleSubmit} className="card-body">
          <p className='font-semibold text-2xl my-3'>Register Form</p>
          <div className="form-control">
           <label className="label">

@@ -1,23 +1,42 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
+import { AuthContext } from '../Provider/AuthProvider';
 
 const Login = () => {
+  const { userLogin, setUser } = useContext(AuthContext);
+  
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const form = e.target;
+    const email = form.email.value;
+    const password = form.pass.value;
+    // console.log({ email, password });
+    userLogin(email, password)
+      .then((result) => {
+        const user = result.user;
+        setUser(user);
+      })
+      .catch((err) => {
+       console.log(err)
+      });
+  };
+
  return (
   <div className='flex items-center justify-center min-h-screen'>
      <div className="card items-center bg-base-100 w-full max-w-sm shrink-0 shadow-2xl">
-      <form className="card-body">
+      <form onSubmit={handleSubmit} className="card-body">
          <p className='font-semibold text-2xl my-3'>LogIn Form</p>
         <div className="form-control">
           <label className="label">
             <span className="label-text">Email</span>
           </label>
-          <input type="email" placeholder="email" className="input input-bordered" required />
+          <input type="email" name='email' placeholder="email" className="input input-bordered" required />
         </div>
         <div className="form-control">
           <label className="label">
             <span className="label-text">Password</span>
           </label>
-          <input type="password" placeholder="password" className="input input-bordered" required />
+          <input type="password" name='pass' placeholder="password" className="input input-bordered" required />
           <label className="label">
             <a href="#" className="label-text-alt link link-hover">Forgot password?</a>
           </label>
