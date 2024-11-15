@@ -32,7 +32,15 @@ const Navbar = () => {
             <div className="navbar-end">
                 <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
                     <div className="w-10 rounded-full">
-                        <img src={userDefaultPic} />
+                        {/* <img src={userDefaultPic} /> */}
+                        {user && user?.email ? (
+            <div>
+              <img className="w-10 rounded-full" src={user?.photoURL} alt="" />
+              <p>{user.displayName}</p>
+            </div>
+          ) : (
+            <img src={userDefaultPic} alt="" />
+          )}
                     </div>
                 </label>
                 {user && user?.email ? (

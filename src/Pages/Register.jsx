@@ -1,31 +1,43 @@
-import React, { useContext } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useContext, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../Provider/AuthProvider';
 
 const Register = () => {
-  const {createNewUser,setUser}=useContext(AuthContext)
+  const {createNewUser,setUser,updateUserProfile}=useContext(AuthContext)
+  const [error,setError]=useState({});
+  const navigate=useNavigate();
 
   const handleSubmit= (e)=>{
     e.preventDefault();
     //get form data
     const form = new FormData(e.target);
     const name = form.get("name");
+    if (name.length < 5) {
+      setError({ ...error, name: "name should be more then 5 character" });
+      return;
+    }
     const email = form.get("email");
-    const photo = form.get("photo");
+    const photo = form.get("url");
     const password = form.get("pass");
 
     createNewUser(email, password)
       .then((result) => {
         const user = result.user;
         setUser(user);
-        console.log(user)
+       // console.log(user)
+        //update
+        updateUserProfile({ displayName: name, photoURL: photo })
+        .then(() => {
+          navigate("/");
+        })
+        .catch((err) => {
+          console.log(err);
+        });
        })
       .catch((err) => {
         console.log(err);
-        // ..
       });
   };
-  
 
   return (
     <div className='flex items-center justify-center min-h-screen'>
@@ -37,7 +49,12 @@ const Register = () => {
             <span className="label-text">Your Name</span>
           </label>
           <input type="text" name='name' placeholder="Your name" className="input input-bordered"  />
-        </div><div className="form-control">
+        </div>
+        {error.name && (
+            <label className="label text-sx text-red-500">{error.name}</label>
+          )}
+
+        <div className="form-control">
           <label className="label">
             <span className="label-text">Photo Url</span>
           </label>
